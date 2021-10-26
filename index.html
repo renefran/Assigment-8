@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Fly to a location based on scroll position</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+  <style>
+  body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+  <style>
+  #map {
+    position: fixed;
+    width: 50%;
+  }
+  #features {
+    width: 50%;
+    margin-left: 50%;
+    font-family: sans-serif;
+    overflow-y: scroll;
+    background-color: #fafafa;
+  }
+  section {
+    padding: 25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 13px;
+  }
+  section.active {
+    opacity: 1;
+  }
+  section:last-child {
+    border-bottom: none;
+    margin-bottom: 200px;
+  }
+</style>
+
+<div id="map"></div>
+<div id="features">
+  <section id="indiae" class="active">
+    <h3>Extraction: India</h3>
+    <p>
+      India is the 5th largest graphite producing country in the world.
+      The countries estimated mining production output last year accounts
+      for a total of 34,000 Metric Tons. The country's graphite reserves
+      vary by each of its states, however, the state of Arunachal Pradesh
+      contains almost half of India's graphite reserves.
+    </p>
+  </section>
+  <section id="madag">
+    <h3>Extraction: Madagascar</h3>
+    <p>
+      While being a relatively small nation located off the eastern coast
+      of Africa, Madagascar is currently the worlds 4th largest graphite
+      producing country. The country's graphite mines have produced an
+      estimated 47,000 Metric Tons of graphite this last year.
+    </p>
+  </section>
+  <section id="brazil">
+    <h3>Extraction: Brazil</h3>
+    <p>
+      At an estimated 95,000 Metric Tons of graphite mining production,
+      Brazil is currently the largest graphite producer in the Americas,
+      and the 3rd largest graphite producer in the world. Not much
+      information is known about the country's graphite-mining industry
+      due to it being a private industry, however, we do know that the
+      country's output has decreased 1,0000 Metric Tons from their annual
+      production the year before.
+    </p>
+  </section>
+  <section id="mozamb">
+    <h3>Extraction: Mozambique</h3>
+    <p>
+      Over the last few years, the small nation of Mozambique, located on
+      the Eastern coast of Africa has made large strides in the
+      graphite-mining industry. Currently the nation sits as the 2nd
+      largest producers of graphite, with an estimated mine production of
+      120,000 Metric Tons. This sudden growth can be linked back to what
+      has been reported as the largest natural graphite mine in the world,
+      and which they believe will remain in operation for 50 years.
+    </p>
+  </section>
+  <section id="chinae">
+    <h3>Extraction: China</h3>
+    <p>
+      As the worlds largest graphite producers at an estimated 650,000
+      Metric Tons, China has long had a stronghold on the graphite market.
+      With the US Geological Survey stating that the country accounted for
+      62 percent of the worlds graphite mining in 2020, it is a surprise to
+      no one that they will control the market for years to come. However,
+      with the rise of plant closures in the country due to over pollution,
+      it is expected that there production will steadily begin to decrease,
+      leaving other countries, such as Mozambique, with an opportunity to
+      fill the market.
+    </p>
+  </section>
+  <section id="directa">
+    <h3>Production: Directa Plus</h3>
+    <p>
+      Located in multiple cities in Italy, Directa Plus is a graphene
+      production company that specializes in creating graphene based
+      products for use in both consumer and industrial markets. One
+      such consumer product that has generated significan media
+      attention, is their "Anti SARS-Cov-2 Graphene Plus Co-Mask," which
+      utilizes the anti-viral and heat dispersion properties of graphene.
+      The company is currently the 5th leading graphene company in the
+      world.
+    </p>
+  </section>
+  <section id="archer">
+    <h3>Production: Archer Materials</h3>
+    <p>
+      Located in the cities of Adelaide and Sydney, Australia, Archer
+      Materials is a technology company that is utilizing graphene to
+      create the next generation of semiconductors for what they believe
+      is an increasingly mobile and data centric world. In specific they
+      are using graphene to create enhanced biosensors that in conjunction
+      with the development of their 12CQ qubit processor chips would solve
+      the problem of room-temperature quantum computing, thus enabling
+      consumer ownership of quantum computing technology. The company is
+      currently the 4th leading graphene company in the world.
+    </p>
+  </section>
+  <section id="zen">
+    <h3>Production: ZEN Graphene Solutions</h3>
+    <p>
+      Located in Guelph, Ontario in Canada, Zen Graphene Solutions is a
+      nanotechnology company that focuses on the next generation of
+      healthcare solutions. Their ZENGuard antimicrobial masks are created
+      using graphene and have already been approved by Health Canada, and
+      has been stated to have a patent-pending graphene coating with 99
+      percent antimicrobial activity. The company is currently the 3rd
+      leading graphene company in the world, however, with their goal to
+      commercialize ZENGuard, as well as other PPE, they are sure to
+      continue rising globally.
+    </p>
+  </section>
+  <section id="talga">
+    <h3>Production: Talga Resources</h3>
+    <p>
+      Based out of Australia, but with operations in Sweden, Germany, and
+      the United Kingdom, Talga Resources is an advanced materials company
+      that focuses on making battery anodes and graphene additive products.
+      Their most notable project is their coated graphite anode prodcut
+      known as Talnode-C which is to be sold to lithium-ion battery cell
+      manufacturers. The product would allow lithium-ion batteries to
+      retain 100 percent capacity and 100 percent cycle efficiency, which
+      no other lithium-ion batteries have done. Because of this the company
+      is currently the 2nd leading graphene company in the world.
+    </p>
+  </section>
+  <section id="xplore">
+    <h3>Production: NanoXplore</h3>
+    <p>
+      Located in Montreal, Canada, NanoXplore is the worlds number one
+      leading graphene company. The company has been on the frontier in
+      terms of the graphene industries biggest problem, scalability. They
+      were able to do this due to their patented liquid exfoliation process
+      which they claim is low cost, can create large volumes, and is highly
+      scalable. In addition to pioneering a scalable production process of
+      graphene, the company also utilizes its unique properties as an
+      additive to plastic and composite products.
+    </p>
+  </section>
+  <section id="usa">
+    <h3>Distribution: USA</h3>
+    <p>
+      With the USA's lack of a graphite-mining industry, one would think
+      that they wouldn't be one of the worlds largest distributors of
+      graphene. However, due to both the country's trade with countries such
+      as Canada, China, and the Brazil, as well as companies in the country
+      such as Tesla and Apple, the USA distributes a large quantity of
+      graphene products to its consumers and is only going to increase
+      its consumption in US markets.
+    </p>
+  </section>
+  <section id="uk">
+    <h3>Distribution: United Kingdom</h3>
+    <p>
+      Similar to the USA, the United Kingdom also struggles with a lack of
+      internal graphite-production, however, what allows the country to
+      remain a large distributor of graphene products is the country's
+      relation to Talga Resources, the 2nd largest graphene company in the
+      world, which has an operation in the UK which deals with development
+      and marketing, and the relationship with their partner facility in
+      Sweden which owns high grade graphite deposits.
+    </p>
+  </section>
+  <section id="aus">
+    <h3>Distribution: Australia</h3>
+    <p>
+      With its geographical location in the East, and it being the base of
+      operations for both major graphen companies, Talga Resources and
+      Archer Materials, Australia is a large distributor of graphene products
+      both domestically and internationally. Its easier access to graphite
+      producing countries such as China and India, and its research done by
+      private companies allow this to be the case.
+    </p>
+  </section>
+  <section id="japan">
+    <h3>Distribution: Japan</h3>
+    <p>
+      Japan has long been one of the worlds leading countries in terms of
+      technological advancements and distribution globally. Similarly to
+      Australia, Japan also benefits from its close proximity to graphite
+      producing countries, such as China due to their lack of graphite
+      production. However, its biggest influence as a distributor is the
+      amount of smaller research companies creating graphene technology
+      and their already strong foothold in the world of advanced tech.
+    </p>
+  </section>
+  <section id="china">
+    <h3>Distribution: China</h3>
+    <p>
+      As the worlds largest graphite-producing country, it is no surprise
+      that China is also one of the worlds largest distributors of graphene
+      products. Similar to Japan, China has also long had an influence on
+      emerging technologies, and with increased access to both the US markets
+      and smaller emerging economies in Africa and South America, it is
+      easy to understand how they are one of the worlds largest distributors
+      of graphene products.
+    </p>
+  </section>
+  <section id="china">
+    <h3>Thank You!</h3>
+    <p>
+
+    </p>
+    <small id="citation">
+      Adapted from
+      <a href="https://www.statista.com/statistics/1040399/global-market-capitalization-leading-graphene-companies/">Statista</a>
+    </small>
+  </section>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoidHJlZWZhbGxkb3duIiwiYSI6ImNrYmlwNWkzaDBmYmgyeWswcTVsa3ZvMmUifQ.K98vl28x9Km5pWBpKL_opQ';
+const map = new mapboxgl.Map({
+  container: 'map',
+  // style: 'mapbox://styles/mapbox/streets-v11',
+    style: 'mapbox://styles/mapbox/dark-v9',
+  center: [77.69373, 22.33860],
+  zoom: 3,
+});
+
+const chapters = {
+  'indiae': {
+    center: [77.69373, 22.33860],
+    zoom: 4,
+  },
+  'brazil': {
+    center: [-51.13911, -10.93844],
+    zoom: 3,
+  },
+  'madag': {
+    center: [46.19688, -19.78734],
+    zoom: 3,
+  },
+  'mozamb': {
+    center: [34.81256, -18.33104],
+    zoom: 3,
+  },
+  'chinae': {
+    center: [102.44973, 33.40205],
+    zoom: 3,
+  },
+  'directa': {
+    center: [13.31391, 42.25947],
+    zoom: 4,
+  },
+  'archer': {
+    center: [134.43255, -26.12625],
+    zoom: 3
+  },
+  'zen': {
+    center: [-105.41234, 55.19810],
+    zoom: 3,
+  },
+  'talga': {
+    center: [134.43255, -26.12625],
+    zoom: 3
+  },
+  'xplore': {
+    center: [-105.41234, 55.19810],
+    zoom: 3,
+  },
+  'usa': {
+    center: [-98.80040, 38.91843],
+    zoom: 3,
+  },
+  'uk': {
+    center: [-2.07761, 54.06381],
+    zoom: 4,
+  },
+  'aus': {
+    center: [134.43255, -26.12625],
+    zoom: 3,
+  },
+  'japan': {
+    center: [138.30325, 36.04355],
+    zoom: 4,
+  },
+  'china': {
+    center: [102.44973, 33.40205],
+    zoom: 3,
+  },
+};
+
+let activeChapterName = 'indiae';
+function setActiveChapter(chapterName) {
+  if (chapterName === activeChapterName) return;
+
+  map.flyTo(chapters[chapterName]);
+
+  document.getElementById(chapterName).classList.add('active');
+  document.getElementById(activeChapterName).classList.remove('active');
+
+  activeChapterName = chapterName;
+}
+
+function isElementOnScreen(id) {
+  const element = document.getElementById(id);
+  const bounds = element.getBoundingClientRect();
+  return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+
+// On every scroll event, check which element is on screen
+window.onscroll = () => {
+  for (const chapterName in chapters) {
+    if (isElementOnScreen(chapterName)) {
+      setActiveChapter(chapterName);
+      break;
+    }
+  }
+};
+</script>
+
+</body>
+</html>
